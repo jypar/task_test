@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.StringWriter;
+import java.util.Optional;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -24,16 +25,21 @@ public class PaymentServiceImpl implements PaymentService {
     public String addOrUpdate(Payment payment){
 
         paymentRepository.save(payment);
-        Response response = new Response(payment.getId(),payment.getAccount(),0,"PAYMENT CONFIRMED",payment.getDate());
+        Response response = new Response(payment.getId(),payment.getAccount(),1,"PAYMENT CONFIRMED",payment.getDate());
         return marshal(response);
     }
 
     @Override
     public String findAccount(Payment payment)  {
 
-        Boolean pay = paymentRepository.existsById(payment.getId());
-        String message = (pay)?"ACCOUNT EXISTS":"ACCOUNT DOES NOT EXIST";
-        Response response = new Response(payment.getId(),payment.getAccount(),0,message,payment.getDate());
+        Response response;
+        if(payment.getAccount() == null || payment.getId() == null){
+            response = new Response("Account number or id is null");
+        } else {
+            Optional<Payment> pay = paymentRepository.findById(payment.getId());
+            String message = (pay.get().getAccount().equals(payment.getAccount()) ) ? "ACCOUNT EXISTS" : "ACCOUNT DOES NOT EXIST";
+            response = new Response(payment.getId(), payment.getAccount(), (message.equals("ACCOUNT EXISTS")?1:0), message, payment.getDate());
+        }
         return marshal(response);
     }
 

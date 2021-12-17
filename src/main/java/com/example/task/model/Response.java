@@ -1,7 +1,4 @@
 package com.example.task.model;
-
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-
 import javax.xml.bind.annotation.*;
 import java.util.Date;
 
@@ -20,6 +17,10 @@ public class Response {
     private Date dts;
 
     public Response() {
+    }
+
+    public Response(String message) {
+        this.message = message;
     }
 
     public Response(Long id, Long p_id, Integer status, String message, Date dts) {

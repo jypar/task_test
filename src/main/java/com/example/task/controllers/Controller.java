@@ -36,6 +36,5 @@ public class Controller {
         ObjectMapper objectMapper = new ObjectMapper();
         Payment payment = objectMapper.readValue(request,Payment.class);
         return paymentService.findAccount(payment);
-
     }
 }

@@ -9,11 +9,11 @@ import java.util.Date;
 public class Payment {
 
     @Id
-    @Column(name="id")
+    @Column(name="id",unique = true)
     private Long id;
     @Column(name="supplier_id")
     private Long supplier_id;
-    @Column (name="account")
+    @Column (name="account",unique = true)
     private Long account;
     @Column(name="amount")
     private Double amount;
